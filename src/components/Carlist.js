@@ -1,40 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css"
 import {Button} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Addcar from "./Addcar";
 import EditCar from "./EditCar";
 
-export default function Carlist() {
-    const [cars, setCars] = useState([]);
-
-    useEffect(() => fetchData(), []);
-
-    const fetchData = ()=>{
-        fetch('https://carstockrest.herokuapp.com/cars')
-            .then(resp => resp.json())
-            .then(data => setCars(data._embedded.cars))
-    }
+export default function Carlist(props) {
+    useEffect(() => props.fetchData(), [props]);
 
     const deleteCar = (link) => {
         if (window.confirm("Are you sure ?")) {
             fetch(link, {method:'DELETE'})
-                .then(res => fetchData())
+                .then(() => props.fetchData())
                 .catch(err => console.log(err))
         }
-    }
-
-    const saveCar = (car) => {
-        fetch('https://carstockrest.herokuapp.com/cars', {
-            method:'POST',
-            headers:{
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify(car)
-        })
-            .then(res => fetchData())
-            .catch(err => console.log(err))
     }
 
     const editCar = (car, link) => {
@@ -45,7 +24,7 @@ export default function Carlist() {
             },
             body: JSON.stringify(car)
         })
-            .then(res => fetchData())
+            .then(() => props.fetchData())
             .catch(err => console.log(err))
     }
 
@@ -99,8 +78,7 @@ export default function Carlist() {
 
     return (
         <div>
-            <Addcar saveCar={saveCar} />
-            <ReactTable filterable={true} data={cars} columns={columns} />
+            <ReactTable filterable={true} data={props.cars} columns={columns} />
         </div>
     );
 }

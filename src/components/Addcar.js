@@ -27,8 +27,8 @@ export default function Addcar(props) {
 
     return (
         <div>
-            <Button style={{margin: 20}} variant="outlined" onClick={handleClickOpen}>
-                Add new car
+            <Button style={{margin: 20}} variant="contained" onClick={handleClickOpen}>
+                Add a car
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add a car</DialogTitle>
